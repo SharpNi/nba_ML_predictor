@@ -7,11 +7,11 @@ from nba_api.stats.endpoints import leaguedashteamstats
 from pandas import DataFrame
 from tabulate import tabulate
 
-from Key import *
+from config import *
 
 
 def get_betting_info():
-    today = datetime.today().strftime('%Y-%m-%d')
+    today: str = datetime.today().strftime('%Y-%m-%d')
     url = "https://therundown-therundown-v1.p.rapidapi.com/sports/4/events/%s" % today
 
     querystring = { "affiliate_ids": "19,23", "offset": "300"}
@@ -87,7 +87,7 @@ def pace_last_n_games(games: int) -> DataFrame:
     return pace
 
 def team_ppg_last_n_games(team_names: list, games=None) -> list:
-    teams_ppg = []
+    teams_ppg: list = []
     team_stats_df = get_team_stats_last_n_games(games)
     team_stats_df['TEAM_PPG']= team_stats_df.apply(lambda row: round(row.PTS / row.GP, 1), axis=1)
     team_stats_df['TEAM_NAME'] = team_stats_df.apply(lambda row: row.TEAM_NAME.split(' ')[-1], axis=1)
@@ -99,15 +99,15 @@ def team_ppg_last_n_games(team_names: list, games=None) -> list:
     return teams_ppg
 
 def get_matchups() -> list:
-    live_scoreboard = scoreboard.ScoreBoard().games.get_dict()
-    matchups = [[game['awayTeam']['teamName'].split(' ')[-1], game['homeTeam']['teamName'].split(' ')[-1]]
+    live_scoreboard: dict = scoreboard.ScoreBoard().games.get_dict()
+    matchups: list = [[game['awayTeam']['teamName'].split(' ')[-1], game['homeTeam']['teamName'].split(' ')[-1]]
                       for game in live_scoreboard]
 
     return matchups
 
 def get_teams_playing() -> list:
-    live_scoreboard = scoreboard.ScoreBoard().games.get_dict()
-    teams_playing = ([game['awayTeam']['teamName'] for game in live_scoreboard]
+    live_scoreboard: dict = scoreboard.ScoreBoard().games.get_dict()
+    teams_playing: list = ([game['awayTeam']['teamName'] for game in live_scoreboard]
                            + [game['homeTeam']['teamName'] for game in live_scoreboard])
 
     return teams_playing
@@ -121,7 +121,6 @@ def main():
         top_n_teams = int(input('Top _ Teams: '))
     except ValueError:
         top_n_teams = None
-
     matchups = overs_last_n_games(top_n_teams,last_n_games)
     if not matchups:
         print('No matchups fit criteria on this date.')

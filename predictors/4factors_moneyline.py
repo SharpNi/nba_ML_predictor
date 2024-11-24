@@ -55,21 +55,11 @@ def calculate_4factor_score(team: str, games=None) -> float:
 
 
 def main():
-    last_n_games = int(input('Last _ Games: '))
+    last_n_games: int = int(input('Last _ Games: '))
     matchups = get_moneylines()
     for matchup in matchups:
         matchup.insert(2, calculate_4factor_score(matchup[1], last_n_games))
         matchup.insert(2, calculate_4factor_score(matchup[0], last_n_games))
-
-# This has been removed
-    # for potential_game in matchups:
-    #     for game in get_moneylines():
-    #         if potential_game[0] == game[0]:
-    #             potential_game.append(game[2])
-    #             potential_game.append(game[3])
-    #             potential_game.append(game[4])
-    #             potential_game.append(game[5])
-    #             potential_game.append(game[6])
 
     df = pd.DataFrame(matchups,columns=['Away Team','Home Team',
                                         f'Away Last {last_n_games} Games 4 Factor Rating',
