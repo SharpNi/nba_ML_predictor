@@ -55,7 +55,7 @@ def calculate_4factor_score(team: str, games=None) -> float:
 
 
 def main():
-    last_n_games: int = int(input('Last _ Games: '))
+    last_n_games = int(input('Last _ Games: '))
     matchups = get_moneylines()
     for matchup in matchups:
         matchup.insert(2, calculate_4factor_score(matchup[1], last_n_games))
